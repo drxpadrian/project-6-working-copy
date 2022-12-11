@@ -35,11 +35,11 @@ public class DictionaryController {
         long nanoSeconds = sw.getLastTaskTimeNanos();
 
         String message = new StringBuilder().append("Retrieved entry for [")
-                                            .append(word)
-                                            .append("] in ")
-                                            .append(nanoSeconds / 1000000.0)
-                                            .append("ms")
-                                            .toString();
+                .append(word)
+                .append("] in ")
+                .append(nanoSeconds / 1000000.0)
+                .append("ms")
+                .toString();
         logger.info(message);
 
         return entry;
@@ -56,13 +56,13 @@ public class DictionaryController {
         long nanoSeconds = sw.getLastTaskTimeNanos();
 
         String message = new StringBuilder().append("Retrieved ")
-                                            .append(entries.size())
-                                            .append(" entries for words starting with [")
-                                            .append(value)
-                                            .append("] in ")
-                                            .append(nanoSeconds / 1000000.0)
-                                            .append("ms")
-                                            .toString();
+                .append(entries.size())
+                .append(" entries for words starting with [")
+                .append(value)
+                .append("] in ")
+                .append(nanoSeconds / 1000000.0)
+                .append("ms")
+                .toString();
         logger.info(message);
 
         return entries;
@@ -79,13 +79,14 @@ public class DictionaryController {
         long nanoSeconds = sw.getLastTaskTimeNanos();
 
         String message = new StringBuilder().append("Retrieved ")
-                                            .append(entries.size())
-                                            .append(" entries for words containing [")
-                                            .append(value)
-                                            .append("] in ")
-                                            .append(nanoSeconds / 1000000.0)
-                                            .append("ms")
-                                            .toString();
+                .append(entries.size())
+                .append(" entries for words containing [")
+                .append(value)
+                .append("] in ")
+                .append(nanoSeconds / 1000000.0)
+                .append("ms")
+                .toString();
+
         logger.info(message);
 
         return entries;
@@ -102,15 +103,35 @@ public class DictionaryController {
         long nanoSeconds = sw.getLastTaskTimeNanos();
 
         String message = new StringBuilder().append("Retrieved entries for words containing")
-                                            .append(" consecutive double letters,")
-                                            .append(" containing ")
-                                            .append(entries.size())
-                                            .append(" entries in ")
-                                            .append(nanoSeconds / 1000000.0)
-                                            .append("ms")
-                                            .toString();
+                .append(" consecutive double letters,")
+                .append(" containing ")
+                .append(entries.size())
+                .append(" entries in ")
+                .append(nanoSeconds / 1000000.0)
+                .append("ms")
+                .toString();
         logger.info(message);
 
+        return entries;
+    }
+    @GetMapping("/getWordsEndingWith/{value}")
+    public List<Entry> getWordsEndingWith(@PathVariable String value) {
+
+        StopWatch sw = new StopWatch();
+        sw.start();
+        List<Entry> entries = this.dictionaryService.getWordsEndingWith(value);
+        sw.stop();
+
+        long nanoSeconds = sw.getLastTaskTimeNanos();
+        String message = new StringBuilder().append("Retrieved entries for words ending with [")
+                .append(value)
+                .append("] containing ")
+                .append(entries.size())
+                .append(" entries in ")
+                .append(nanoSeconds / 1000000.0)
+                .append("ms")
+                .toString();
+        logger.info(message);
         return entries;
     }
 }

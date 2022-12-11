@@ -1,6 +1,5 @@
 package com.example.dictionary.service;
 
-import com.example.dictionary.exception.WordNotFoundException;
 import com.example.dictionary.model.Entry;
 import com.example.dictionary.reference.DictionaryReference;
 import org.springframework.stereotype.Service;
@@ -13,14 +12,16 @@ import java.util.stream.Collectors;
 @Service
 public class DictionaryService {
 
-    public Entry getWord(String word) throws WordNotFoundException {
+    private static final String INVALID_REFERENCE = "Invalid Reference";
+
+    public Entry getWord(String word) {
 
         String definition = DictionaryReference.getDictionary()
                                                .get(word);
         Entry entry = new Entry(word, definition);
 
         if (definition == null) {
-            throw new WordNotFoundException("Word [" + word + "] not found.");
+            entry.setDefinition(INVALID_REFERENCE);
         }
 
         return entry;
@@ -48,6 +49,18 @@ public class DictionaryService {
                                   .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
                                   .map(entry -> new Entry(entry.getKey(), entry.getValue()))
                                   .collect(Collectors.toList());
+    }
+
+    public List<Entry> getWordsEndingWith(String value) {
+        return DictionaryReference.getDictionary()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getKey()
+                        .endsWith(value))
+                .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
+                .map(entry -> new Entry(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
     }
 
     public List<Entry> getWordsThatContainConsecutiveDoubleLetters() {
